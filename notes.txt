@@ -47,5 +47,5 @@ clean inference_graph folder in object detection
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training//ssd_inception_v2_coco.config --trained_checkpoint_prefix training/dir/model.ckpt-2000 --output_directory inference_graph
 
 
-run Object_detection_image.py  (I Added image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB) )
+run Object_detection_image.py  (I Added image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB) after image = cv2.imread(PATH_TO_IMAGE) )
 
