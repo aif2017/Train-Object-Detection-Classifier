@@ -68,7 +68,7 @@ mkdir images
 mkdir inference_graph
 mkdir training
 ```
-
+#### NOW just follow my instruction in note.txt
 ### 11 - Configure environment variable
 
 Configure PYTHONPATH environment variable
