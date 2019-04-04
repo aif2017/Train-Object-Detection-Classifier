@@ -1,5 +1,5 @@
 # Train-an-Object-Detection-Classifier 
-
+##windows 10 . anaconda python3.6 . using anaconda prompt
 ## youtube tutorial
 [![Train-an-Object-Detection-Classifier](https://img.youtube.com/vi/eJcIntjgCbQ/0.jpg)](https://youtu.be/eJcIntjgCbQ)
 
@@ -68,7 +68,7 @@ mkdir images
 mkdir inference_graph
 mkdir training
 ```
-##### >>>>>>>> NOW just follow my instruction in note.txt
+# >>>>>>>> NOW just follow my instruction in note.txt
 ### 11 - Configure environment variable
 
 Configure PYTHONPATH environment variable
