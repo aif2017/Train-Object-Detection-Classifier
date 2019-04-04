@@ -72,47 +72,46 @@ mkdir training
 ### 11 - Configure environment variable
 
 Configure PYTHONPATH environment variable
+set PYTHONPATH=D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models;D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research;D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research\slim
 
-PYTHONPATH variable must be created that points to the directories
-\models \
-\models\research \
-\models\research\slim  
-##### NOTE : every time you run your project must add this lines
-```
-set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
-echo %PYTHONPATH%
-set PATH=%PATH%;PYTHONPATH
-echo %PATH%
-```
+
 ### 12 - Compile Protobufs
 Protobuf (Protocol Buffers) libraries must be compiled , it used by TensorFlow to configure model and training parameters
 Open Anaconda Prompt and go to `C:\tensorflow1\models\research`
 ```
-protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto
+cd /d D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research
+protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto .\object_detection\protos\calibration.proto
 ```
+just on time
 ```
-(tensorflow1) C:\tensorflow1\models\research> python setup.py build
-(tensorflow1) C:\tensorflow1\models\research> python setup.py install
+cd /d D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research
+python setup.py build
+
+python setup.py install
 ```
 ### 13 - Test TensorFlow setup
 Test TensorFlow setup to verify it works
-`(tensorflow1) C:\tensorflow1\models\research\object_detection> jupyter notebook object_detection_tutorial.ipynb`
+```
+cd /d D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research\object_detection
+
+jupyter notebook object_detection_tutorial.ipynb
+```
 
 ### 14 - Generate Training Data
 TFRecords is an input data to the TensorFlow training model
 creat `.csv` files from `.xml` files 
 ```
-cd C:\tensorflow1\models\research\object_detection
+cd /d D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research\object_detection
 python xml_to_csv.py
 ```
 This creates a `train_labels.csv` and `test_labels.csv` file in the `\object_detection\images` folder.
+
+### 15 - Edit `generate_tfrecord.py`
+ edit `generate_tfrecord.py` and put your classes names
 ```
 python generate_tfrecord.py --csv_input=images\train_labels.csv --image_dir=images\train --output_path=train.record
 python generate_tfrecord.py --csv_input=images\test_labels.csv --image_dir=images\test --output_path=test.record
 ```
-### 15 - Edit `generate_tfrecord.py`
-edit edit `generate_tfrecord.py` and put your classes names
-
 ### 16 - Create a label map and edit the training configuration file.
 go to `\data `
 copy `pet_label_map.pbtxt` to `\training` dir and rename it to  `labelmap.pbtxt`
@@ -145,21 +144,29 @@ In the `eval_input_reader` section change `input_path` and `label_map_path` as :
 Input_path : `C:/tensorflow1/models/research/object_detection/test.record` <br/>
 Label_map_path: `C:/tensorflow1/models/research/object_detection/training/labelmap.pbtxt`
 
-### 18 - Run the Training
+
+### 17.5 -test all files is ready
+in training folder we have a folder that is result of extracting downloaded model e.g ssd_inception_v2_coco_2018_01_28
+label_map.pbtxt
+sth like cofiguration file
+
+### 18 - Run the Training (with ssd)
 ```
-python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config
+cd /d D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research\object_detection
+python train.py --logtostderr --train_dir=training/dir --pipeline_config_path=training/ssd_inception_v2_coco.config
 ```
 
 ### 19 - Tensorboard 
-in cmd type `(tensorflow1) C:\tensorflow1\models\research\object_detection>tensorboard --logdir=training`
+in cmd type `cd /d D:\AI\object-detection\tf_api\workspace\Train-Object-Detection-Classifier-master\models\research\object_detection  tensorboard --logdir=training`
 
 
 ### 20 - Export Inference Graph
  training is complete ,the last step is to generate the frozen inference graph (.pb file)
 change “XXXX” in “model.ckpt-XXXX” should be replaced with the highest-numbered .ckpt file in the training folder:
 
+clean inference_graph folder in object detection
 ```
-python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training//ssd_inception_v2_coco.config --trained_checkpoint_prefix training/dir/model.ckpt-2000 --output_directory inference_graph
 ```
 
 
